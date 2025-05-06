@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Hero : MonoBehaviour
 {
@@ -10,12 +11,17 @@ public class Hero : MonoBehaviour
     public float rollMult = -45;
     public float pitchMult = 30;
     public float gameRestartDelay = 2f;
+    public GameObject projectilePrefab;
+    public float projectileSpeed = 40;
 
     [Header("Set Dynamically")]
     public float _shieldLevel = 1;
     public GameObject lastTriggerGo = null;
 
-    public float shiedldLevel
+    public delegate void WeaponFireDelegate();
+    public WeaponFireDelegate fireDelegate;
+
+    public float shieldLevel
     {
         get
         {
@@ -23,7 +29,7 @@ public class Hero : MonoBehaviour
         }
         set
         {
-            shiedldLevel = Mathf.Min(value, 4);
+            _shieldLevel = Mathf.Min(value, 4);
             if(value < 0)
             {
                 Destroy(this.gameObject);
@@ -42,6 +48,7 @@ public class Hero : MonoBehaviour
         {
             Debug.LogError("Hero.Awake() - Attempted to assign second Hero.S!");
         }
+        //fireDelegate += TempFire;
     }
 
     // Update is called once per frame
@@ -55,6 +62,27 @@ public class Hero : MonoBehaviour
         pos.y += yAxis * speed * Time.deltaTime;
         transform.position = pos;
         transform.rotation = Quaternion.Euler(yAxis * pitchMult, xAxis * rollMult, 0);
+        //if (Input.GetKeyDown(KeyCode.Space))
+        //{
+        //    TempFire();
+        //}
+        if (Input.GetAxis("Jump") == 1 && fireDelegate != null)
+        {
+            fireDelegate();
+        }
+    }
+
+    void TempFire()
+    {
+        GameObject projGO = Instantiate<GameObject>(projectilePrefab);
+        projGO.transform.position = transform.position;
+        Rigidbody rigiB = projGO.GetComponent<Rigidbody>();
+        //rigiB.velocity = Vector3.up * projectileSpeed;
+
+        Projectile projectile = projGO.GetComponent<Projectile>();
+        projectile.type = WeaponType.blaster;
+        float tSpeed = Main.GetWeaponDefinition(projectile.type).velocity;
+        rigiB.velocity = Vector3.up * tSpeed;
     }
 
     private void OnTriggerEnter(Collider other)

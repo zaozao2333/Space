@@ -1,15 +1,18 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Main : MonoBehaviour
 {
     static public Main S;
+    static Dictionary<WeaponType, WeaponDefinition> WEAP_DICT;
 
     [Header("Set in Inspector")]
     public GameObject[] prefabEnemies;
     public float enemySpawnPerSecond = 0.5f;
     public float enemySpawnPadding = 1.5f;
+    public WeaponDefinition[] weaponDefinitions;
     private BoundsCheck bndCheck;
 
     // Start is called before the first frame update
@@ -18,6 +21,11 @@ public class Main : MonoBehaviour
         S = this;
         bndCheck = GetComponent<BoundsCheck>();
         Invoke("SpawnEnemy", 1f / enemySpawnPerSecond);
+        WEAP_DICT = new Dictionary<WeaponType, WeaponDefinition>();
+        foreach(WeaponDefinition definition in weaponDefinitions)
+        {
+            WEAP_DICT[definition.type] = definition;
+        }
     }
 
     public void SpawnEnemy()
@@ -41,9 +49,22 @@ public class Main : MonoBehaviour
         Invoke("SpawnEnemy", 1f / enemySpawnPerSecond);
     }
 
-    // Update is called once per frame
-    void Update()
+    public void DelayedRestart(float delay)
     {
-        
+        Invoke("Restart", delay);
+    }
+
+    public void Restart()
+    {
+        SceneManager.LoadScene("_Scene_0");
+    }
+
+    static public WeaponDefinition GetWeaponDefinition(WeaponType wt)
+    {
+        if (WEAP_DICT.ContainsKey(wt))
+        {
+            return WEAP_DICT[wt];
+        }
+        return new WeaponDefinition();
     }
 }

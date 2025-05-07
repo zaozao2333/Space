@@ -17,7 +17,7 @@ public enum WeaponType
 public class WeaponDefinition
 {
     public WeaponType type = WeaponType.none;
-    public string Letter;
+    public string letter;
     public Color color = Color.white;
     public GameObject projectilePrefab;
     public Color projectileColor = Color.white;

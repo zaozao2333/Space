@@ -10,6 +10,7 @@ public class Enemy : MonoBehaviour
     public float health = 10;
     public int score = 100;
     public float showDamageDuration = 0.1f;
+    public float powerUpDropChance = 1f;
 
     [Header("Set Dynamically: Enemy")]
     public Color[] originalColors;
@@ -78,6 +79,10 @@ public class Enemy : MonoBehaviour
                 ShowDamage();
                 if(health <= 0)
                 {
+                    if (!notifiedOfDestruction)
+                    {
+                        Main.S.ShipDestoryed(this);
+                    }
                     Destroy(this.gameObject);
                 }
                 Destroy(otherGO);

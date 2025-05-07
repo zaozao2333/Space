@@ -13,7 +13,29 @@ public class Main : MonoBehaviour
     public float enemySpawnPerSecond = 0.5f;
     public float enemySpawnPadding = 1.5f;
     public WeaponDefinition[] weaponDefinitions;
+    public GameObject prefabPowerUp;
+    public WeaponType[] powerUpFrequency = new WeaponType[]
+    {
+        WeaponType.blaster, WeaponType.blaster,
+        WeaponType.spread,
+        WeaponType.shield
+    };
+
     private BoundsCheck bndCheck;
+
+    public void ShipDestoryed(Enemy e)
+    {
+        if(Random.value < e.powerUpDropChance)
+        {
+            int ndx = Random.Range(0, powerUpFrequency.Length);
+            WeaponType puType = powerUpFrequency[ndx];
+
+            GameObject go = Instantiate(prefabPowerUp) as GameObject;
+            PowerUp powerUp = go.GetComponent<PowerUp>();
+            powerUp.SetType(puType);
+            powerUp.transform.position = e.transform.position;
+        }
+    }
 
     // Start is called before the first frame update
     void Awake()

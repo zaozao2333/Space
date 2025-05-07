@@ -440,7 +440,7 @@ MonoBehaviour:
     color: {r: 1, g: 0, b: 0, a: 1}
     projectilePrefab: {fileID: 5651295155099448710, guid: 96400d5c6bbf7d244bd69bd019d215c3, type: 3}
     projectileColor: {r: 1, g: 0, b: 0, a: 1}
-    damageOnHit: 1
+    damageOnHit: 5
     continuousDamage: 0
     delayBetweenShots: 0.2
     velocity: 50
@@ -896,7 +896,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4155573168758686605, guid: d8a513bbc1d566e42a5df15c44e755a1, type: 3}
       propertyPath: _type
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 6665871685887394517, guid: d8a513bbc1d566e42a5df15c44e755a1, type: 3}
       propertyPath: m_Name

@@ -92,7 +92,7 @@ public class Enemy : MonoBehaviour
         }
     }
 
-    void ShowDamage()
+    public void ShowDamage()
     {
         foreach (Material mat in materials)
         {
@@ -109,5 +109,19 @@ public class Enemy : MonoBehaviour
             materials[i].color = originalColors[i];
         }
         showingDamage = false;
+    }
+
+    public void TakeDamage(float damage)
+    {
+        health -= damage;
+        ShowDamage();
+        if (health <= 0)
+        {
+            if (!notifiedOfDestruction)
+            {
+                Main.S.ShipDestoryed(this);
+            }
+            Destroy(this.gameObject);
+        }
     }
 }

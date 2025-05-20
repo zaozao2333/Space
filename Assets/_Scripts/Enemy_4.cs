@@ -24,8 +24,6 @@ public class Enemy_4 : Enemy
     // Start is called before the first frame update
     void Start()
     {
-        p0 = p1 = pos;
-        InitMovement();
 
         Transform t;
         foreach(Part part in parts)
@@ -35,6 +33,8 @@ public class Enemy_4 : Enemy
             {
                 part.go = t.gameObject;
                 part.mat = part.go.GetComponent<Renderer>().material;
+                part.go.tag = "EnemyPart";
+                part.go.layer = LayerMask.NameToLayer("EnemyPart");
             }
         }
     }
@@ -61,7 +61,7 @@ public class Enemy_4 : Enemy
         pos = (1 - u) * p0 + u * p1;
     }
 
-    Part FindPart(string name)
+    public Part FindPart(string name)
     {
         foreach (Part part in parts)
         {
@@ -71,7 +71,7 @@ public class Enemy_4 : Enemy
         return null;
     }
 
-    Part FindPart(GameObject go)
+    public Part FindPart(GameObject go)
     {
         foreach (Part part in parts)
         {
@@ -80,30 +80,30 @@ public class Enemy_4 : Enemy
         return null;
     }
 
-    bool Destoryed(Part part)
+    public bool Destoryed(Part part)
     {
         if (part == null) return true;
         return (part.health <= 0); 
     }
 
-    bool Destoryed(string name)
+    public bool Destoryed(string name)
     {
         return Destoryed(FindPart(name));
     }
 
-    bool Destoryed(GameObject go)
+    public bool Destoryed(GameObject go)
     {
         return Destoryed(FindPart(go));
     }
 
-    void ShowLocalizedDamage(Material m)
+    public void ShowLocalizedDamage(Material m)
     {
         m.color = Color.red;
         damageDoneTime = Time.time + showDamageDuration;
         showingDamage = true;
     }
 
-    private void OnCollisionEnter(Collision collision)
+    protected virtual void OnCollisionEnter(Collision collision)
     {
         GameObject other = collision.gameObject;
         switch (other.tag)
@@ -115,7 +115,6 @@ public class Enemy_4 : Enemy
                     Destoryed(other);
                     break;
                 }
-
                 GameObject goHit = collision.contacts[0].thisCollider.gameObject;
                 Part partHit = FindPart(goHit);
                 if (partHit == null)

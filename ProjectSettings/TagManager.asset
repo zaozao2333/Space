@@ -10,6 +10,8 @@ TagManager:
   - ProjectileEnemy
   - PowerUp
   - PowerUpBox
+  - LaserHero
+  - EnemyPart
   layers:
   - Default
   - TransparentFX
@@ -18,13 +20,13 @@ TagManager:
   - Water
   - UI
   - 
-  - 
   - Hero
+  - EnemyPart
   - Enemy
   - ProjectileHero
   - ProjectileEnemy
   - PowerUp
-  - 
+  - LaserHero
   - 
   - 
   - 

@@ -84,6 +84,7 @@ public class Weapon : MonoBehaviour
         if (!gameObject.activeInHierarchy) return;
         if (Time.time - lastShot < definition.delayBetweenShots) return;
         Projectile p;
+        Laser l;
         Vector3 vel = Vector3.up * definition.velocity;
         if (transform.up.y < 0)
         {
@@ -108,6 +109,9 @@ public class Weapon : MonoBehaviour
                 p.transform.rotation = Quaternion.AngleAxis(-10, Vector3.back);
                 p.GetComponent<Rigidbody>().velocity = p.transform.rotation * vel;
                 break;
+            case WeaponType.laser:
+                l = MakeLaser();
+                break;
         }
     }
 
@@ -130,6 +134,31 @@ public class Weapon : MonoBehaviour
         p.type = type;
         lastShot = Time.time;
         return p;
+    }
+
+    public Laser MakeLaser()
+    {
+        GameObject go = new GameObject("Laser");
+        go.transform.position = collar.transform.position;
+        go.transform.SetParent(PROJECTILE_ANCHOR, true);
+
+        // 添加LineRenderer组件
+        LineRenderer lr = go.AddComponent<LineRenderer>();
+        lr.material = new Material(Shader.Find("Sprites/Default"));
+        lr.startWidth = 0.5f;
+        lr.endWidth = 0.5f;
+        lr.startColor = definition.projectileColor;
+        lr.endColor = definition.projectileColor;
+
+        // 添加Laser组件
+        Laser laser = go.AddComponent<Laser>();
+        laser.type = type;
+        laser.damagePerSecond = definition.continuousDamage;
+        laser.maxDistance = 100f; // 可根据需要调整
+        laser.hitLayers = LayerMask.GetMask("Enemy", "EnemyPart");
+
+        lastShot = Time.time;
+        return laser;
     }
     // Update is called once per frame
     void Update()
